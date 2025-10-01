@@ -14,7 +14,7 @@ def parse_cors(v:Any)->list[str]|str:
 
 class Settings(BaseSettings):
     model_config=SettingsConfigDict(
-        env_file=".env",
+        env_file="./.env",
         env_ignore_empty=True,
         extra="ignore",
         case_sensitive=False
@@ -42,7 +42,7 @@ class Settings(BaseSettings):
     @property
     def SQL_ALCHEMY_URI(self)->PostgresDsn: 
         return MultiHostUrl.build(              #type: ignore
-            scheme="postgresql+psycopg2",
+            scheme="postgresql",
             username=self.POSTGRES_USER,
             password=self.POSTGRES_PASSWORD,
             host=self.POSTGRES_SERVER,

@@ -28,6 +28,21 @@
   --destructive: 0 62.8% 30.6%;     /* Red for destructive actions */
   --destructive-foreground: 0 0% 98%; /* White text on red */
   --border: 0 0% 14.9%;             /* Dark borders */
+  
+  /* Marker & Info Window Specific Variables */
+  --marker-primary: 142 76% 36%;     /* Main green for markers */
+  --marker-primary-hover: 142 76% 40%; /* Lighter green on hover */
+  --marker-primary-selected: 142 86% 46%; /* Bright green when selected */
+  --marker-glow: 142 76% 36%;        /* Green glow color */
+  --marker-background: 0 0% 3.9%;    /* Dark background for info windows */
+  --marker-surface: 0 0% 6%;         /* Card surface color */
+  --marker-border: 0 0% 14.9%;       /* Border color */
+  --marker-text-primary: 0 0% 98%;   /* Primary text color */
+  --marker-text-secondary: 0 0% 70%; /* Secondary text color */
+  --marker-text-muted: 0 0% 45%;     /* Muted text color */
+  --marker-accent: 142 76% 36%;      /* Accent color for links/highlights */
+  --marker-success: 142 71% 45%;     /* Success/cached state */
+  --marker-warning: 48 96% 89%;      /* Loading state */
   --input: 0 0% 14.9%;              /* Dark input backgrounds */
   --ring: 142 76% 36%;              /* Green ring color */
   --chart-1: 20 70% 50%;            /* Chart colors */
@@ -268,4 +283,41 @@ html {
 .flip-in {
   animation: flipIn 0.25s ease-in-out forwards;
   animation-delay: 0.25s;
+}
+
+/* Cluster marker animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Info window expand animation */
+@keyframes expandFromCenter {
+  0% {
+    transform: translateY(8px) scaleX(0.3) scaleY(0.8);
+    transform-origin: center center;
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(4px) scaleX(0.8) scaleY(0.9);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(8px) scaleX(1) scaleY(1);
+    transform-origin: center center;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

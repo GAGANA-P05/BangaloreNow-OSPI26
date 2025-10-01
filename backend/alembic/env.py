@@ -10,8 +10,8 @@ from alembic import context
 # Add the parent directory to sys.path so we can import from app
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from model import Base, Event, Keyword
-from core.config import settings
+from app.model import Base, Event
+from app.core.config import settings
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -46,6 +46,7 @@ def run_migrations_offline() -> None:
 
     """
     url = settings.SQL_ALCHEMY_URI
+    print(url)
     context.configure(
         url=url, #type:ignore
         target_metadata=target_metadata,
