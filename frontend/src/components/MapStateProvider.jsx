@@ -129,13 +129,22 @@ export const MapStateProvider = ({ children }) => {
     
     try {
       setIsLoadingDetails(true);
-      const response = await fetch(getApiUrl(API_ENDPOINTS.GET_EVENT_DETAILS(eventId)));
+      const apiUrl = getApiUrl(API_ENDPOINTS.GET_EVENT_DETAILS(eventId));
+      console.log('🔍 Fetching event details from:', apiUrl);
+      
+      const response = await fetch(apiUrl);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
       const data = await response.json();
+      console.log('✅ Event details fetched successfully:', data);
       
       setEventDetailsCache(prev => ({ ...prev, [eventId]: data }));
       return data;
     } catch (error) {
-      console.error('Error fetching event details:', error);
+      console.error('❌ Error fetching event details:', error);
       return null;
     } finally {
       setIsLoadingDetails(false);
@@ -144,13 +153,24 @@ export const MapStateProvider = ({ children }) => {
   
   // Marker interaction handlers - no state cascade
   const handleMarkerClick = useCallback(async (eventId, clusterData = null) => {
+    console.log('🖱️ Marker clicked:', eventId, clusterData);
+    
     if (clusterData?.isCluster) {
       return { action: 'expandCluster', data: clusterData };
     }
     
     setSelectedEventId(eventId);
     setIsLoadingDetails(true);
-  }, []);
+    
+    // Fetch event details when marker is clicked
+    try {
+      console.log('📡 Fetching details for event:', eventId);
+      await fetchEventDetails(eventId);
+    } catch (error) {
+      console.error('❌ Error loading event details:', error);
+      setIsLoadingDetails(false);
+    }
+  }, [fetchEventDetails]);
   
   const handleInfoClose = useCallback(() => {
     setSelectedEventId(null);
