@@ -146,71 +146,90 @@ class AlleventsSpider(scrapy.Spider):
             # Try to find the organizer name - check multiple places
             organizer_name = None
 
-            # First, check the structured data (this is usually the most reliable)
-            organizer = event_schema.get("organizer") if event_schema else None
-            if isinstance(organizer, dict):
-                organizer_name = organizer.get("name")
+        def normalize_organizer(raw_name):
+            if not raw_name:
+                return None
+            if isinstance(raw_name, str):
+                cleaned = raw_name.strip()
+                # Some pages embed a JSON string; try to extract the actual name
+                if cleaned.startswith("{") and '"name"' in cleaned:
+                    try:
+                        nested = json.loads(cleaned)
+                        maybe_name = nested.get("name")
+                        if maybe_name:
+                            cleaned = str(maybe_name).strip()
+                    except Exception:
+                        pass
+                # Drop unrealistic organiser strings
+                if len(cleaned) > 50:
+                    return None
+                return cleaned or None
+            return None
 
-            # If that didn't work, look for text like "Hosted by", "Curated by", or "By" on the page
-            if not organizer_name:
-                organizer_text = response.xpath(
-                    '//*[contains(text(),"Hosted by") or contains(text(),"Curated by") or contains(text(),"By ")]/text()'
-                ).get()
+        # First, check the structured data (this is usually the most reliable)
+        organizer = event_schema.get("organizer") if event_schema else None
+        if isinstance(organizer, dict):
+            organizer_name = organizer.get("name")
 
-                if organizer_text:
-                    organizer_name = re.sub(
-                        r'^(Hosted by|Curated by|By)\s+',
-                        '',
-                        organizer_text.strip(),
-                        flags=re.I
-                    )
+        # If that didn't work, look for text like "Hosted by", "Curated by", or "By" on the page
+        if not organizer_name:
+            organizer_text = response.xpath(
+                '//*[contains(text(),"Hosted by") or contains(text(),"Curated by") or contains(text(),"By ")]/text()'
+            ).get()
 
-            # Make sure empty strings become None
-            organizer_name = organizer_name or None
+            if organizer_text:
+                organizer_name = re.sub(
+                    r'^(Hosted by|Curated by|By)\s+',
+                    '',
+                    organizer_text.strip(),
+                    flags=re.I
+                )
 
+        # Normalize and clamp to a realistic length
+        organizer_name = normalize_organizer(organizer_name)
 
-            # Figure out the ticket price - try a few different places
-            # First, check the structured data (most reliable)
-            offers = event_schema.get("offers") if event_schema else None
+        # Figure out the ticket price - try a few different places
+        # First, check the structured data (most reliable)
+        offers = event_schema.get("offers") if event_schema else None
+        if isinstance(offers, dict):
+            price = offers.get("price")
+            if price:
+                ticket_price = f"₹{price}"
+
+        # If no price found, check if the page says "free entry" or "free event"
+        if not ticket_price:
+            page_text = " ".join(response.xpath("//body//text()").getall()).lower()
+            if "free entry" in page_text or "free event" in page_text:
+                ticket_price = "Free"
+
+        # Last resort: search for price patterns like "₹500" in the page text
+        if not ticket_price:
+            price_match = re.search(r'₹\s?\d+(?:\s?-\s?₹?\d+)?', page_text)
+            if price_match:
+                ticket_price = price_match.group(0).replace(" ", "")
+
+        # Find the ticket purchase URL - try a few different strategies
+        # First, check the structured data (usually the best source)
+        if event_schema:
+            offers = event_schema.get("offers")
             if isinstance(offers, dict):
-                price = offers.get("price")
-                if price:
-                    ticket_price = f"₹{price}"
+                ticket_url = offers.get("url")
 
-            # If no price found, check if the page says "free entry" or "free event"
-            if not ticket_price:
-                page_text = " ".join(response.xpath("//body//text()").getall()).lower()
-                if "free entry" in page_text or "free event" in page_text:
-                    ticket_price = "Free"
+        # If that didn't work, look for links with "tickets" that also have the event ID
+        if not ticket_url and event_id:
+            ticket_links = response.css('a[href*="tickets"]::attr(href)').getall()
+            for link in ticket_links:
+                if event_id in link:
+                    ticket_url = response.urljoin(link)
+                    break
 
-            # Last resort: search for price patterns like "₹500" in the page text
-            if not ticket_price:
-                price_match = re.search(r'₹\s?\d+(?:\s?-\s?₹?\d+)?', page_text)
-                if price_match:
-                    ticket_price = price_match.group(0).replace(" ", "")
+        # Make sure the URL is complete (starts with http/https)
+        if ticket_url and not ticket_url.startswith("http"):
+            ticket_url = response.urljoin(ticket_url)
 
-            # Find the ticket purchase URL - try a few different strategies
-            # First, check the structured data (usually the best source)
-            if event_schema:
-                offers = event_schema.get("offers")
-                if isinstance(offers, dict):
-                    ticket_url = offers.get("url")
-
-            # If that didn't work, look for links with "tickets" that also have the event ID
-            if not ticket_url and event_id:
-                ticket_links = response.css('a[href*="tickets"]::attr(href)').getall()
-                for link in ticket_links:
-                    if event_id in link:
-                        ticket_url = response.urljoin(link)
-                        break
-
-            # Make sure the URL is complete (starts with http/https)
-            if ticket_url and not ticket_url.startswith("http"):
-                ticket_url = response.urljoin(ticket_url)
-
-            # If we're already on a ticket page, just use this URL
-            if not ticket_url and "tickets" in response.url:
-                ticket_url = response.url
+        # If we're already on a ticket page, just use this URL
+        if not ticket_url and "tickets" in response.url:
+            ticket_url = response.url
 
 
 
