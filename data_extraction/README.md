@@ -87,6 +87,15 @@ python schedule_eventbrite.py  REM Keep Eventbrite in sync
 
 **Note**: The scripts automatically detect and use virtual environment if present at `../venv/`. Otherwise, they use system Python.
 
+## Execution Times
+
+- **allevents.in scraper**: ~2-3 minutes (77 events across ~10 pages)
+- **eventbrite.com scraper**: ~3-5 minutes (18 events across ~20 pages, Playwright rendering adds overhead)
+- **Consolidation script**: ~5-10 seconds (merges & deduplicates)
+- **Total end-to-end run**: ~5-8 minutes
+
+*Times may vary based on network speed and system performance.*
+
 ## Data Files
 
 ```
