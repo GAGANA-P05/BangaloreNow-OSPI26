@@ -6,7 +6,6 @@ __pycache__/
 
 venv/
 .env
-.env.*
 pyvenv.cfg
 
 
@@ -25,3 +24,5 @@ Web_Scraping/event_scraper/data/*.json
 
 .vscode/
 .DS_Store
+
+dbconfig/
