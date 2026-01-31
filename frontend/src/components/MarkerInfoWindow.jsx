@@ -71,21 +71,6 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
           width: 'clamp(280px, 90vw, 580px)'
         }}
       >
-        {/* Close button */}
-        <div className="flex justify-end p-2">
-          <button
-            onClick={onClose}
-            className="text-xl font-bold transition-colors duration-200 hover:scale-110 transform"
-            style={{
-              color: `hsl(var(--marker-text-muted))`,
-              cursor: 'pointer'
-            }}
-            title="Close"
-          >
-            ×
-          </button>
-        </div>
-
         {isLoading && !event ? (
           // Loading state
           <div className="flex items-center justify-center py-8 px-4">
@@ -101,61 +86,91 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
             </span>
           </div>
         ) : event ? (
-          <div className="px-4 pb-4">
-            {/* Two column layout: Left (event info), Right (organizer & details) */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              
-              {/* LEFT COLUMN - Event Name and Location/Date */}
-              <div className="space-y-4">
-                {/* Event Name Box */}
-                <div 
-                  className="p-4 rounded-lg border-2"
-                  style={{
-                    backgroundColor: `hsl(var(--marker-surface))`,
-                    borderColor: `hsl(var(--marker-border))`
-                  }}
-                >
-                  {event.url ? (
-                    <a
-                      href={event.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-bold text-base leading-tight hover:underline transition-colors"
-                      style={{
-                        color: `hsl(var(--marker-accent))`,
-                        cursor: 'pointer',
-                        display: 'block',
-                        wordBreak: 'break-word'
-                      }}
-                      title={event.name}
-                    >
-                      {event.name}
-                    </a>
-                  ) : (
-                    <h3 
-                      className="font-bold text-base leading-tight"
-                      style={{
-                        color: `hsl(var(--marker-text-primary))`,
-                        wordBreak: 'break-word'
-                      }}
-                      title={event.name}
-                    >
-                      {event.name}
-                    </h3>
-                  )}
-                </div>
+          <div className="pb-4">
+            {/* Heading - Full width */}
+            <div 
+              className="px-4 py-4 m-2 rounded-lg border-2 flex justify-between items-center"
+              style={{
+                backgroundColor: `hsl(var(--marker-background))`,
+                borderColor: '#10b981',
+              }}
+            >
+              <div style={{ flex: 1, textAlign: 'center' }}>
+                {event.url ? (
+                  <a
+                    href={event.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-lg leading-tight hover:opacity-80 transition-opacity"
+                    style={{
+                      color: '#10b981',
+                      cursor: 'pointer',
+                      display: 'block',
+                      wordBreak: 'break-word'
+                    }}
+                    title={event.name}
+                  >
+                    {event.name}
+                  </a>
+                ) : (
+                  <h3 
+                    className="font-bold text-lg leading-tight"
+                    style={{
+                      color: '#10b981',
+                      wordBreak: 'break-word'
+                    }}
+                    title={event.name}
+                  >
+                    {event.name}
+                  </h3>
+                )}
+              </div>
+              <button
+                onClick={onClose}
+                className="text-xl font-bold transition-colors duration-200 hover:scale-110 transform ml-2 flex-shrink-0"
+                style={{
+                  color: '#10b981',
+                  cursor: 'pointer',
+                  background: 'none',
+                  border: 'none',
+                  padding: '0'
+                }}
+                title="Close"
+              >
+                ×
+              </button>
+            </div>
 
-                {/* Location and Date/Day Box */}
+            {/* Two column layout: Left (date & address), Right (info & organizer) */}
+            <div className="px-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                
+                {/* LEFT COLUMN - Date and Day with Address */}
                 <div 
-                  className="p-4 rounded-lg border-2 min-h-[140px] flex flex-col justify-center"
+                  className="p-4 rounded-lg border-2 min-h-[180px] flex flex-col justify-center"
                   style={{
                     backgroundColor: `hsl(var(--marker-surface))`,
                     borderColor: `hsl(var(--marker-border))`
                   }}
                 >
-                  {/* Location */}
+                  {/* Date and Day */}
+                  {event.startDate && (
+                    <div className="mb-4">
+                      <p 
+                        className="text-sm font-semibold mb-1"
+                        style={{
+                          color: `hsl(var(--marker-text-primary))`,
+                          wordBreak: 'break-word'
+                        }}
+                      >
+                        📅 {formatDate(event.startDate)}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Location and Address */}
                   {(event.venue || event.address) && (
-                    <div className="mb-3">
+                    <div>
                       {event.venue && (
                         <p 
                           className="font-semibold text-sm mb-1"
@@ -169,7 +184,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                       )}
                       {event.address && (
                         <p 
-                          className="text-xs"
+                          className="text-xs leading-relaxed"
                           style={{
                             color: `hsl(var(--marker-text-secondary))`,
                             wordBreak: 'break-word'
@@ -180,108 +195,107 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                       )}
                     </div>
                   )}
+                </div>
 
-                  {/* Date and Day */}
-                  {event.startDate && (
-                    <div>
+                {/* RIGHT COLUMN - Info and Organizer */}
+                <div className="space-y-4">
+                  {/* Event Info and Link Box - Top */}
+                  <div 
+                    className="p-4 rounded-lg border-2"
+                    style={{
+                      backgroundColor: `hsl(var(--marker-surface))`,
+                      borderColor: `hsl(var(--marker-border))`
+                    }}
+                  >
+                    <h4 
+                      className="font-bold text-sm mb-2"
+                      style={{
+                        color: `hsl(var(--marker-text-primary))`
+                      }}
+                    >
+                      Event Info
+                    </h4>
+                    {event.description ? (
                       <p 
-                        className="text-xs font-medium"
+                        className="text-xs leading-relaxed line-clamp-3"
                         style={{
                           color: `hsl(var(--marker-text-secondary))`,
                           wordBreak: 'break-word'
                         }}
                       >
-                        📅 {formatDate(event.startDate)}
+                        {event.description}
                       </p>
-                    </div>
-                  )}
-                </div>
-              </div>
+                    ) : (
+                      <p 
+                        className="text-xs italic"
+                        style={{
+                          color: `hsl(var(--marker-text-muted))`
+                        }}
+                      >
+                        No details available
+                      </p>
+                    )}
+                    {event.url && (
+                      <a
+                        href={event.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-semibold mt-2 inline-block hover:opacity-70 transition-opacity"
+                        style={{
+                          color: `hsl(var(--marker-accent))`,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        View Event →
+                      </a>
+                    )}
+                  </div>
 
-              {/* RIGHT COLUMN - Organizer & Additional Info */}
-              <div className="space-y-4">
-                {/* Organizer Details Box */}
-                <div 
-                  className="p-4 rounded-lg border-2"
-                  style={{
-                    backgroundColor: `hsl(var(--marker-surface))`,
-                    borderColor: `hsl(var(--marker-border))`
-                  }}
-                >
-                  <h4 
-                    className="font-bold text-sm mb-2"
+                  {/* Organizer Info and Other Information Box - Bottom */}
+                  <div 
+                    className="p-4 rounded-lg border-2"
                     style={{
-                      color: `hsl(var(--marker-text-primary))`
+                      backgroundColor: `hsl(var(--marker-surface))`,
+                      borderColor: `hsl(var(--marker-border))`
                     }}
                   >
-                    Organiser deets
-                  </h4>
-                  {event.organizer ? (
-                    <p 
-                      className="text-xs"
+                    <h4 
+                      className="font-bold text-sm mb-2"
                       style={{
-                        color: `hsl(var(--marker-text-secondary))`,
-                        wordBreak: 'break-word'
+                        color: `hsl(var(--marker-text-primary))`
                       }}
                     >
-                      {event.organizer}
-                    </p>
-                  ) : (
-                    <p 
-                      className="text-xs italic"
-                      style={{
-                        color: `hsl(var(--marker-text-muted))`
-                      }}
-                    >
-                      Not provided
-                    </p>
-                  )}
+                      Organizer Info
+                    </h4>
+                    {event.organizer ? (
+                      <p 
+                        className="text-xs leading-relaxed"
+                        style={{
+                          color: `hsl(var(--marker-text-secondary))`,
+                          wordBreak: 'break-word'
+                        }}
+                      >
+                        {event.organizer}
+                      </p>
+                    ) : (
+                      <p 
+                        className="text-xs italic"
+                        style={{
+                          color: `hsl(var(--marker-text-muted))`
+                        }}
+                      >
+                        Not provided
+                      </p>
+                    )}
+                  </div>
                 </div>
 
-                {/* Additional Information Box */}
-                <div 
-                  className="p-4 rounded-lg border-2 min-h-[140px] flex flex-col justify-center"
-                  style={{
-                    backgroundColor: `hsl(var(--marker-surface))`,
-                    borderColor: `hsl(var(--marker-border))`
-                  }}
-                >
-                  <h4 
-                    className="font-bold text-sm mb-2"
-                    style={{
-                      color: `hsl(var(--marker-text-primary))`
-                    }}
-                  >
-                    Additional info
-                  </h4>
-                  {event.description ? (
-                    <p 
-                      className="text-xs leading-relaxed line-clamp-4"
-                      style={{
-                        color: `hsl(var(--marker-text-secondary))`,
-                        wordBreak: 'break-word'
-                      }}
-                    >
-                      {event.description}
-                    </p>
-                  ) : (
-                    <p 
-                      className="text-xs italic"
-                      style={{
-                        color: `hsl(var(--marker-text-muted))`
-                      }}
-                    >
-                      No additional details available
-                    </p>
-                  )}
-                </div>
               </div>
-
             </div>
 
             {/* Event Image - Full Width if available */}
             {event.image && (
-              <div className="mt-4">
+              <div className="mt-4 px-4">
                 <div 
                   className="rounded-lg overflow-hidden border-2 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-[1.02] relative"
                   style={{
