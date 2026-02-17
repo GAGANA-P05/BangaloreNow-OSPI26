@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     
     
     API_V1_STR:str = "api/v1"
-    FRONTEND_HOST:str
+    FRONTEND_HOST:str = "http://localhost:5173"
     ENVIRONMENT:Literal["local","production"]="local"
     
     BACKEND_CORS_ORIGINS:Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)]=[]
@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     POSTGRES_USER:str
     POSTGRES_PASSWORD:str=""
     POSTGRES_DB:str=""
-    EVENT_DAYS_DELTA:int
+    EVENT_DAYS_DELTA:int=30
     @computed_field # type : ignore[prop-decorator]
     @property
     def SQL_ALCHEMY_URI(self)->PostgresDsn: 

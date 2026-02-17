@@ -43,26 +43,26 @@ export function EventsList({ events, onEventClick, onClose }) {
               onClick={() => onEventClick(event.id)}
             >
               <div className="space-y-2">
-                <h3 className="font-semibold text-sm line-clamp-2 text-gray-900">
+                <h3 className="font-semibold text-sm line-clamp-2 text-gray-300">
                   {event.name}
                 </h3>
 
                 {event.distance_km !== null && (
-                  <div className="flex items-center gap-1 text-xs text-blue-600">
+                  <div className="flex items-center gap-1 text-xs text-blue-300">
                     <Navigation className="w-3 h-3" />
                     <span>{event.distance_km} km away</span>
                   </div>
                 )}
 
                 {event.venue && (
-                  <div className="flex items-center gap-1 text-xs text-gray-600">
+                  <div className="flex items-center gap-1 text-xs text-gray-500">
                     <MapPin className="w-3 h-3" />
                     <span className="line-clamp-1">{event.venue}</span>
                   </div>
                 )}
 
                 {event.startDate && (
-                  <div className="flex items-center gap-1 text-xs text-gray-600">
+                  <div className="flex items-center gap-1 text-xs text-gray-500">
                     <Calendar className="w-3 h-3" />
                     <span>{formatDate(event.startDate)}</span>
                     {event.endDate && event.endDate !== event.startDate && (

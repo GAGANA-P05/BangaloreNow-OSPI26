@@ -35,13 +35,13 @@ async def search_events(
     session: Session = Depends(get_db),
     user_lat: Optional[float] = Query(None, description="User's latitude"),
     user_lng: Optional[float] = Query(None, description="User's longitude"),
-    max_distance_km: Optional[float] = Query(None, description="Maximum distance in km"),
-    start_date: Optional[date] = Query(None, description="Filter events starting from this date"),
-    end_date: Optional[date] = Query(None, description="Filter events ending before this date"),
-    search_query: Optional[str] = Query(None, description="Search in name, description, venue, organizer"),
+    maxDistanceKm: Optional[float] = Query(None, description="Maximum distance in km"),
+    startDate: Optional[date] = Query(None, description="Filter events starting from this date"),
+    endDate: Optional[date] = Query(None, description="Filter events ending before this date"),
+    searchQuery: Optional[str] = Query(None, description="Search in name, description, venue, organizer"),
     venue: Optional[str] = Query(None, description="Filter by venue"),
     organizer: Optional[str] = Query(None, description="Filter by organizer"),
-    sort_by: Optional[str] = Query("distance", description="Sort by: distance, date, name"),
+    sortBy: Optional[str] = Query("distance", description="Sort by: distance, date, name"),
     limit: int = Query(100, ge=1, le=500),
     offset: int = Query(0, ge=0)
 ):
@@ -57,13 +57,13 @@ async def search_events(
         filters = EventFilterParams(
             user_lat=user_lat,
             user_lng=user_lng,
-            max_distance_km=max_distance_km,
-            start_date=start_date,
-            end_date=end_date,
-            search_query=search_query,
+            max_distance_km=maxDistanceKm,
+            start_date=startDate,
+            end_date=endDate,
+            search_query=searchQuery,
             venue=venue,
             organizer=organizer,
-            sort_by=sort_by,
+            sort_by=sortBy,
             limit=limit,
             offset=offset
         )
