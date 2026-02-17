@@ -24,5 +24,3 @@ Web_Scraping/event_scraper/data/*.json
 
 .vscode/
 .DS_Store
-
-dbconfig/
