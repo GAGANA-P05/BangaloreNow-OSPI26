@@ -28,6 +28,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -71,8 +72,15 @@ class GoogleGeocoder:
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.base_url = "https://maps.googleapis.com/maps/api/geocode/json"
+        self.call_count = 0  # Track geocoding API calls
 
     def geocode(self, query: str) -> GeocodeResult | None:
+        self.call_count += 1
+        
+        # Pause after every 100 geocoding requests to avoid rate limiting
+        if self.call_count % 100 == 0:
+            print(f"Pausing for 5 seconds after {self.call_count} geocoding requests...")
+            time.sleep(5)
         try:
             r = requests.get(
                 self.base_url,
