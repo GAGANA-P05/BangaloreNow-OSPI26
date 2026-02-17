@@ -23,7 +23,7 @@ import json
 import os
 import sys
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -175,7 +175,7 @@ def main(argv: list[str]) -> int:
                 failed += 1
                 writer.writerow(
                     {
-                        "timestamp": datetime.utcnow().isoformat(),
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
                         "source": None,
                         "source_url": None,
                         "event_name": None,
@@ -197,7 +197,7 @@ def main(argv: list[str]) -> int:
                 # Not a geocode error; still useful to log why it can't be geocoded.
                 writer.writerow(
                     {
-                        "timestamp": datetime.utcnow().isoformat(),
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
                         "source": ev.get("source"),
                         "source_url": ev.get("source_url") or ev.get("event_url"),
                         "event_name": ev.get("event_name"),
@@ -221,7 +221,7 @@ def main(argv: list[str]) -> int:
                 failed += 1
                 writer.writerow(
                     {
-                        "timestamp": datetime.utcnow().isoformat(),
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
                         "source": ev.get("source"),
                         "source_url": ev.get("source_url") or ev.get("event_url"),
                         "event_name": ev.get("event_name"),
