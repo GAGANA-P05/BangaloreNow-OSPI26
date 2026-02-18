@@ -12,6 +12,7 @@ import {
   UserCircle,
   SlidersHorizontal,
 } from 'lucide-react';
+import { getApiUrl, API_ENDPOINTS } from '../lib/api.js';
 
 const defaultFilters = {
   search_query: '',
@@ -53,7 +54,7 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
 
   const fetchFilterOptions = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/filter-options`);
+      const response = await fetch(getApiUrl(API_ENDPOINTS.FILTER_OPTIONS));
       const data = await response.json();
       setFilterOptions(data);
     } catch (error) {
@@ -93,6 +94,7 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
 
     console.log('🔍 Applying filters:', payload);
     onFilterChange(payload);
+    onClose();
   };
 
   const handleClearFilters = () => {

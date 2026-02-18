@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Search, X, MapPin, Calendar, Navigation } from 'lucide-react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
+import { getApiUrl, API_ENDPOINTS } from '../lib/api.js';
 
 export function SearchBar({ onSearch, onEventSelect, userLocation }) {
   const [query, setQuery] = useState('');
@@ -59,16 +60,23 @@ export function SearchBar({ onSearch, onEventSelect, userLocation }) {
         params.append('user_lng', userLocation.lng);
       }
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/search-events?${params}`
-      );
+      const url = `${getApiUrl(API_ENDPOINTS.SEARCH_EVENTS)}?${params}`;      
+      const response = await fetch(url);
       
-      if (response.ok) {
-        const data = await response.json();
-        setResults(data);
+      console.log('Response status:', response.status, response.statusText);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Search failed:', response.status, errorText);
+        setResults([]);
+        return;
       }
+      
+      const data = await response.json();
+      setResults(data);
     } catch (error) {
       console.error('Search error:', error);
+      setResults([]);
     } finally {
       setIsLoading(false);
     }
@@ -179,7 +187,7 @@ export function SearchBar({ onSearch, onEventSelect, userLocation }) {
                         <Badge variant="secondary" className="text-xs">Nearby</Badge>
                       )}
                       {event.startDate && new Date(event.startDate) > new Date() && (
-                        <Badge variant="outline" className="text-xs">Upcoming</Badge>
+                        <Badge variant="outline" className="text-xs text-black">Upcoming</Badge>
                       )}
                     </div>
                   </div>

@@ -6,6 +6,7 @@ import { useMapState } from './mapStateContext.js';
 import OptimizedMarker from './OptimizedMarker.jsx';
 import MapErrorBoundary from './MapErrorBoundary.jsx';
 import Navbar from './Navbar.jsx';
+import { EventsList } from './EventsList.jsx';
 import { FilterPanel } from './FilterPanel.jsx';
 import { FilterStatusBar } from './FilterStatusBar.jsx';
 import '../leaflet-custom.css';
@@ -272,6 +273,8 @@ const MapContentWrapper = ({
   const {
     showFilterPanel,
     setShowFilterPanel,
+    showEventsList,
+    setShowEventsList,
     searchEvents,
     clearFilters,
     userLocation,
@@ -338,6 +341,15 @@ const MapContentWrapper = ({
             onClose={() => setShowFilterPanel(false)}
             userLocation={userLocation}
             activeFilters={activeFilters}
+          />
+        )}
+
+        {/* Events List */}
+        {showEventsList && filteredEvents.length > 0 && (
+          <EventsList
+            events={filteredEvents}
+            onEventClick={handleMarkerClick}
+            onClose={() => setShowEventsList(false)}
           />
         )}
 

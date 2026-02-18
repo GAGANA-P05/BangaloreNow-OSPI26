@@ -1,4 +1,4 @@
-import React, { useCallback, useState, memo, useMemo } from "react";
+import React, { useCallback, useState, memo, useMemo, useRef, useEffect } from "react";
 import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import MarkerInfoWindow from "./MarkerInfoWindow.jsx";
@@ -20,6 +20,8 @@ const OptimizedMarker = memo(({
   currentZoom = 8
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const markerRef = useRef(null);
+  const popupRef = useRef(null);
 
   const handleClick = useCallback(() => {
     if (onMarkerClick) {
@@ -29,6 +31,15 @@ const OptimizedMarker = memo(({
 
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+
+  // Open popup when isSelected becomes true
+  useEffect(() => {
+    if (isSelected && markerRef.current) {
+      const marker = markerRef.current;
+      // Open the popup on the marker
+      marker.openPopup();
+    }
+  }, [isSelected]);
 
   // Create custom marker icon
   const markerIcon = useMemo(() => {
@@ -88,6 +99,7 @@ const OptimizedMarker = memo(({
 
   return (
     <Marker
+      ref={markerRef}
       position={[position.lat, position.lng]}
       icon={markerIcon}
       eventHandlers={{
@@ -99,6 +111,7 @@ const OptimizedMarker = memo(({
     >
       {isSelected && (
         <Popup
+          ref={popupRef}
           closeButton={false}
           autoClose={false}
           closeOnClick={false}

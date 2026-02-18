@@ -29,6 +29,7 @@ export function MapStateProvider({ children }) {
   
   // UI state
   const [showFilterPanel, setShowFilterPanel] = useState(false);
+  const [showEventsList, setShowEventsList] = useState(false);
   
   // Refs to prevent state dependencies
   const mapBoundsRef = useRef(null);
@@ -92,6 +93,7 @@ export function MapStateProvider({ children }) {
       console.log('✅ Filtered events:', data.length, 'events');
        setFilteredEvents(data);
        setActiveFilters(filters);
+       setShowEventsList(true);
     } catch (error) {
       console.error('❌ Error searching events:', error);
       setFilteredEvents([]);
@@ -103,6 +105,7 @@ export function MapStateProvider({ children }) {
   const clearFilters = useCallback(() => {
     setActiveFilters(null);
     setFilteredEvents([]);
+    setShowEventsList(false);
   }, []);
   
   const fetchEventDetails = useCallback(async (eventId) => {
@@ -217,6 +220,8 @@ export function MapStateProvider({ children }) {
     // UI State
     showFilterPanel,
     setShowFilterPanel,
+    showEventsList,
+    setShowEventsList,
     
     // Actions
     fetchEvents,
