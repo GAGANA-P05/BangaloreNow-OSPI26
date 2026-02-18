@@ -63,6 +63,15 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
   };
 
   const handleInputChange = (field, value) => {
+    // Enforce max distance limit
+    if (field === 'max_distance_km' && value !== '') {
+      const numValue = parseFloat(value);
+      if (numValue > 80) {
+        value = '80';
+      } else if (numValue < 0) {
+        value = '0';
+      }
+    }
     setFilters(prev => ({ ...prev, [field]: value }));
   };
 
@@ -142,22 +151,22 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
                 variant="outline"
                 size="sm"
                 onClick={handleClearFilters}
-                className="rounded-full border-slate-300 text-slate-600 hover:border-slate-900 hover:text-slate-900"
+                className="rounded-full border-slate-300 text-slate-100 hover:border-slate-900 hover:text-white hover:cursor-pointer"
               >
                 Reset
               </Button>
             )}
-            <Button variant="ghost" size="icon" onClick={onClose} className="text-slate-500 hover:text-slate-900">
+            <Button variant="ghost" size="icon" onClick={onClose} className="text-slate-500 hover:text-slate-900 hover:cursor-pointer">
               <X className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="max-h-[52vh] space-y-6 overflow-y-auto px-6 pb-16 pt-5">
+      <div className="max-h-[52vh] space-y-6 overflow-y-auto px-6 pb-20 pt-5">
         {/* Search */}
         <section className="space-y-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+          <div className="flex items-center gap-0 text-sm font-semibold text-slate-600">
             <Search className="h-4 w-4" />
             Search everything
           </div>
@@ -194,7 +203,8 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
               <label className="text-xs font-semibold text-slate-500">Max distance (km)</label>
               <input
                 type="number"
-                min="0"
+                min={0}
+                max={80}
                 step="0.5"
                 placeholder="e.g. 10"
                 value={filters.max_distance_km}
@@ -245,7 +255,7 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
               <select
                 value={filters.venue}
                 onChange={(e) => handleInputChange('venue', e.target.value)}
-                className="mt-1 w-full rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm text-slate-900 focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/10"
+                className="mt-1 w-full rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm text-slate-900 focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/10 hover:cursor-pointer"
               >
                 <option value="">All venues</option>
                 {filterOptions.venues.map((venue) => (
@@ -258,7 +268,7 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
               <select
                 value={filters.organizer}
                 onChange={(e) => handleInputChange('organizer', e.target.value)}
-                className="mt-1 w-full rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm text-slate-900 focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/10"
+                className="mt-1 w-full rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm text-slate-900 focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/10 hover:cursor-pointer"
               >
                 <option value="">All organizers</option>
                 {filterOptions.organizers.map((org) => (
@@ -281,7 +291,7 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
                 key={option.id}
                 type="button"
                 onClick={() => handleInputChange('sort_by', option.id)}
-                className={`rounded-3xl border px-4 py-3 text-left text-sm transition ${
+                className={`rounded-3xl border px-4 py-3 text-left text-sm transition hover:cursor-pointer ${
                   filters.sort_by === option.id
                     ? 'border-slate-900 bg-slate-900 text-white shadow-lg'
                     : 'border-slate-200 bg-white/80 text-slate-600 hover:border-slate-900/40'
@@ -291,7 +301,9 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
                   <SlidersHorizontal className="h-4 w-4" />
                   {option.label}
                 </div>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className={`mt-1 text-xs text-slate-300 ${
+                    filters.sort_by === option.id ? 'text-slate-300' : 'text-slate-700'
+                  }`}>
                   {option.blurb}
                 </p>
               </button>
@@ -303,13 +315,13 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
       {/* Action bar */}
       <div className="absolute bottom-0 left-0 right-0 border-t border-white/60 bg-white/95 px-6 py-4">
         <div className="flex flex-col gap-3 md:flex-row">
-          <Button className="flex-1 rounded-2xl bg-slate-900 text-white shadow-md hover:bg-slate-800" onClick={handleApplyFilters}>
+          <Button className="flex-1 rounded-2xl bg-slate-900 text-white shadow-md hover:bg-slate-800 hover:cursor-pointer" onClick={handleApplyFilters}>
             Show {activeFilterCount > 0 ? 'refined' : 'all'} events
           </Button>
           <Button
             variant="outline"
             onClick={handleClearFilters}
-            className="rounded-2xl border-slate-300 text-slate-600 hover:border-slate-900 hover:text-slate-900"
+            className="rounded-2xl border-slate-300 text-slate-300 hover:border-slate-900 hover:text-gray-100 hover:cursor-pointer"
           >
             Clear all
           </Button>

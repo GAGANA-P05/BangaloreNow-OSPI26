@@ -86,6 +86,36 @@ const MapContent = ({ userLocation, showUserMarker, shouldCenterOnUser }) => {
     }
   }, [map, userLocation, shouldCenterOnUser]);
 
+  // Pan to selected event marker to keep popup visible
+  useEffect(() => {
+    if (map && selectedEventId && events.length > 0) {
+      const selectedEvent = events.find(e => e.id === selectedEventId);
+      if (selectedEvent && selectedEvent.position) {
+        const { lat, lng } = selectedEvent.position;
+        
+        // Determine target zoom level (keep current zoom, but ensure minimum of 15)
+        const targetZoom = Math.max(map.getZoom(), 15);
+        
+        // Get map container size to calculate offset
+        const mapSize = map.getSize();
+        const popupHeight = 300; // Approximate popup height in pixels
+        const navbarHeight = 80; // Navbar height at top
+        
+        // Calculate the offset needed to show popup above navbar
+        // Use target zoom for consistent offset calculation
+        const point = map.project([lat, lng], targetZoom);
+        const offsetPoint = L.point(point.x, point.y - (popupHeight / 2 + navbarHeight / 2));
+        const offsetLatLng = map.unproject(offsetPoint, targetZoom);
+        
+        // Smoothly pan to the offset position
+        map.flyTo(offsetLatLng, targetZoom, {
+          duration: 0.8,
+          easeLinearity: 0.25
+        });
+      }
+    }
+  }, [map, selectedEventId, events]);
+
   // Handle bounds changes
   const handleBoundsChanged = useCallback(() => {
     if (!map) return;

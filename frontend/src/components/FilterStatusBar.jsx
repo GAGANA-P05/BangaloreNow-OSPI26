@@ -77,7 +77,7 @@ export function FilterStatusBar({ filters, eventCount, onClear }) {
           onClick={onClear}
           variant="ghost"
           size="sm"
-          className="ml-auto text-slate-600 hover:text-slate-900"
+          className="ml-auto text-slate-600 hover:text-slate-900 hover:cursor-pointer"
         >
           <X className="mr-1 h-4 w-4" />
           Clear filters
