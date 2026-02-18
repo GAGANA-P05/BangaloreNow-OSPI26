@@ -1,8 +1,10 @@
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { MapPin, Calendar, Navigation } from 'lucide-react';
+import { useMapState } from './mapStateContext.js';
 
 export function EventsList({ events, onEventClick, onClose }) {
+  const { setShowFilterPanel } = useMapState();
   const formatDate = (dateString) => {
     if (!dateString) return 'Date TBA';
     const date = new Date(dateString);
@@ -40,7 +42,10 @@ export function EventsList({ events, onEventClick, onClose }) {
             <Card
               key={event.id}
               className="p-3 hover:shadow-md transition-shadow cursor-pointer border"
-              onClick={() => onEventClick(event.id)}
+              onClick={() => {
+                onEventClick(event.id);
+                setShowFilterPanel(false);
+              }}
             >
               <div className="space-y-2">
                 <h3 className="font-semibold text-sm line-clamp-2 text-gray-300">

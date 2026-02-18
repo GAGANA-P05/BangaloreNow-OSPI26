@@ -37,28 +37,10 @@ export function MapStateProvider({ children }) {
   const debounceTimeoutRef = useRef(null);
   const hasInitialLoadRef = useRef(false);
   
-  // Get user's location on mount
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-          console.log('📍 User location obtained:', position.coords.latitude, position.coords.longitude);
-        },
-        (error) => {
-          console.warn('⚠️ Could not get user location:', error.message);
-        }
-      );
-    }
-  }, []);
-  
   // Stable event processing - CLUSTERING DISABLED
   const processedEvents = useMemo(() => {
     // Use filtered events if filters are active, otherwise use all events
-    const eventsToProcess = activeFilters && filteredEvents.length > 0 ? filteredEvents : events;
+    const eventsToProcess = activeFilters ? filteredEvents : events;
     
     if (!eventsToProcess.length) {
       console.log('⚠️  No events to process');
@@ -109,9 +91,9 @@ export function MapStateProvider({ children }) {
       
       const data = await response.json();
       console.log('✅ Filtered events:', data.length, 'events');
-      setFilteredEvents(data);
-      setActiveFilters(filters);
-      setShowEventsList(true);
+       setFilteredEvents(data);
+       setActiveFilters(filters);
+       setShowEventsList(true);
     } catch (error) {
       console.error('❌ Error searching events:', error);
       setFilteredEvents([]);
@@ -231,6 +213,7 @@ export function MapStateProvider({ children }) {
     isLoadingDetails,
     currentZoom,
     userLocation,
+    setUserLocation,
     activeFilters,
     filteredEvents,
     
