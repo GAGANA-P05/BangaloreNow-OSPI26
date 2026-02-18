@@ -26,11 +26,33 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 
+# Scraper output files used to detect whether at least one scraper succeeded.
+_SCRAPER_OUTPUTS = [
+    SCRIPT_DIR / "data" / "allevents.json",
+    SCRIPT_DIR / "data" / "eventbrite.json",
+    SCRIPT_DIR / "data" / "district.json",
+]
+
 
 def _run(cmd: list[str]) -> None:
     p = subprocess.run(cmd, cwd=SCRIPT_DIR)
     if p.returncode != 0:
         raise SystemExit(p.returncode)
+
+
+def _run_soft(cmd: list[str], label: str) -> bool:
+    """Run a command but only warn on failure (soft fail).
+
+    Returns True if the command succeeded, False otherwise.
+    """
+    p = subprocess.run(cmd, cwd=SCRIPT_DIR)
+    if p.returncode != 0:
+        print(
+            f"[WARNING] {label} exited with code {p.returncode} — skipping this source.",
+            file=sys.stderr,
+        )
+        return False
+    return True
 
 
 def main(argv: list[str]) -> int:
@@ -44,14 +66,25 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--skip-geocoding", action="store_true")
     args = parser.parse_args(argv)
 
+    scraper_ok = False  # tracks whether at least one scraper produced output
+
     if not args.skip_allevents:
-        _run([sys.executable, str(SCRIPT_DIR / "run_allevents.py")])
+        _run_soft([sys.executable, str(SCRIPT_DIR / "run_allevents.py")], "allevents")
 
     if not args.skip_eventbrite:
-        _run([sys.executable, str(SCRIPT_DIR / "run_eventbrite.py")])
+        _run_soft([sys.executable, str(SCRIPT_DIR / "run_eventbrite.py")], "eventbrite")
 
     if not args.skip_district:
-        _run([sys.executable, str(SCRIPT_DIR / "run_district.py")])
+        _run_soft([sys.executable, str(SCRIPT_DIR / "run_district.py")], "district")
+
+    # Check that at least one scraper left usable output before continuing.
+    scraper_ok = any(p.exists() and p.stat().st_size > 2 for p in _SCRAPER_OUTPUTS)
+    if not scraper_ok:
+        print(
+            "[ERROR] All scrapers failed or produced no output — aborting pipeline.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
 
     if not args.skip_enhancer:
         _run([sys.executable, str(SCRIPT_DIR / "output_enhancer.py")])
