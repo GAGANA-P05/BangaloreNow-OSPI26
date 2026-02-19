@@ -332,7 +332,7 @@ const MapContentWrapper = ({
   };
 
   return (
-    <div className="w-full h-[60vh] sm:h-[70vh] lg:h-screen bg-gray-900 relative overflow-hidden" style={{ pointerEvents: 'auto' }}>
+    <div className="w-full h-[calc(100vh-4rem)] sm:h-[calc(100vh-5rem)] lg:h-screen bg-gray-900 relative overflow-hidden" style={{ pointerEvents: 'auto' }}>
       <MapErrorBoundary>
         <LoadingOverlay 
           isGettingLocation={isGettingLocation}
