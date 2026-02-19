@@ -130,40 +130,40 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
   ];
 
   return (
-    <Card className="fixed top-20 left-1/2 z-[1100] w-[min(92vw,42rem)] -translate-x-1/2 overflow-hidden rounded-[24px] border border-white/30 bg-white/95 text-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.35)]">
-      <div className="border-b border-slate-200 px-6 pb-4 pt-5">
-        <div className="flex items-start justify-between gap-4">
+    <Card className="fixed top-16 sm:top-20 left-1/2 z-[1100] w-[min(95vw,42rem)] -translate-x-1/2 overflow-hidden rounded-2xl sm:rounded-[24px] border border-white/30 bg-white/95 text-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.35)]">
+      <div className="border-b border-slate-200 px-4 sm:px-6 pb-3 sm:pb-4 pt-4 sm:pt-5">
+        <div className="flex items-start justify-between gap-2 sm:gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">Filters</p>
-            <div className="mt-1 flex items-center gap-3">
-              <h2 className="text-xl font-semibold text-slate-900">Fine-tune your feed</h2>
+            <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.3em] sm:tracking-[0.4em] text-slate-400">Filters</p>
+            <div className="mt-1 flex items-center gap-2 sm:gap-3">
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Fine-tune your feed</h2>
               {activeFilterCount > 0 && (
                 <Badge className="rounded-full bg-slate-900 text-white">
                   {activeFilterCount}
                 </Badge>
               )}
             </div>
-            <p className="mt-1 text-sm text-slate-500">Refine the visible events by text, proximity, dates, and hosts.</p>
+            <p className="mt-1 text-xs sm:text-sm text-slate-500">Refine the visible events by text, proximity, dates, and hosts.</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             {activeFilterCount > 0 && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleClearFilters}
-                className="rounded-full border-slate-300 text-slate-100 hover:border-slate-900 hover:text-white hover:cursor-pointer"
+                className="rounded-full border-slate-300 text-slate-100 hover:border-slate-900 hover:text-white hover:cursor-pointer text-xs"
               >
                 Reset
               </Button>
             )}
-            <Button variant="ghost" size="icon" onClick={onClose} className="text-slate-500 hover:text-slate-900 hover:cursor-pointer">
+            <Button variant="ghost" size="icon" onClick={onClose} className="text-slate-500 hover:text-slate-900 hover:cursor-pointer flex-shrink-0">
               <X className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="max-h-[52vh] space-y-6 overflow-y-auto px-6 pb-20 pt-5">
+      <div className="max-h-[50vh] sm:max-h-[52vh] space-y-4 sm:space-y-6 overflow-y-auto px-4 sm:px-6 pb-20 pt-4 sm:pt-5">
         {/* Search */}
         <section className="space-y-3">
           <div className="flex items-center gap-0 text-sm font-semibold text-slate-600">
@@ -216,12 +216,12 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
         </section>
 
         {/* Dates */}
-        <section className="space-y-4">
+        <section className="space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
             <Calendar className="h-4 w-4" />
             Date window
           </div>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
             <div>
               <label className="text-xs font-semibold text-slate-500">From</label>
               <input
@@ -244,12 +244,12 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
         </section>
 
         {/* Venue + Organizer */}
-        <section className="space-y-4">
+        <section className="space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
             <Building2 className="h-4 w-4" />
             Venue & organisers
           </div>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
             <div>
               <label className="text-xs font-semibold text-slate-500">Venue</label>
               <select
@@ -280,12 +280,12 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
         </section>
 
         {/* Sort */}
-        <section className="space-y-4">
+        <section className="space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
             <Sparkles className="h-4 w-4" />
             Sort palette
           </div>
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {sortOptions.map((option) => (
               <button
                 key={option.id}
@@ -313,15 +313,15 @@ export function FilterPanel({ onFilterChange, onClose, userLocation, activeFilte
       </div>
 
       {/* Action bar */}
-      <div className="absolute bottom-0 left-0 right-0 border-t border-white/60 bg-white/95 px-6 py-4">
-        <div className="flex flex-col gap-3 md:flex-row">
-          <Button className="flex-1 rounded-2xl bg-slate-900 text-white shadow-md hover:bg-slate-800 hover:cursor-pointer" onClick={handleApplyFilters}>
+      <div className="absolute bottom-0 left-0 right-0 border-t border-white/60 bg-white/95 px-4 sm:px-6 py-3 sm:py-4">
+        <div className="flex flex-col gap-2 sm:gap-3 sm:flex-row">
+          <Button className="w-full sm:flex-1 rounded-2xl bg-slate-900 text-white shadow-md hover:bg-slate-800 hover:cursor-pointer text-sm" onClick={handleApplyFilters}>
             Show {activeFilterCount > 0 ? 'refined' : 'all'} events
           </Button>
           <Button
             variant="outline"
             onClick={handleClearFilters}
-            className="rounded-2xl border-slate-300 text-slate-300 hover:border-slate-900 hover:text-gray-100 hover:cursor-pointer"
+            className="w-full sm:w-auto rounded-2xl border-slate-300 text-slate-300 hover:border-slate-900 hover:text-gray-100 hover:cursor-pointer text-sm"
           >
             Clear all
           </Button>

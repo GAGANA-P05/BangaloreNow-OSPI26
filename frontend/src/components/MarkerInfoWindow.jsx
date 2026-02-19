@@ -67,7 +67,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
           borderColor: `hsl(var(--marker-border))`,
           borderWidth: '1px',
           minWidth: '280px',
-          maxWidth: '600px',
+          maxWidth: '95vw',
           width: 'clamp(280px, 90vw, 580px)'
         }}
       >
@@ -89,7 +89,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
           <div className="pb-4">
             {/* Heading - Full width */}
             <div 
-              className="px-4 py-4 m-2 rounded-lg border-2 flex justify-between items-center"
+              className="px-3 sm:px-4 py-3 sm:py-4 m-2 rounded-lg border-2 flex justify-between items-center"
               style={{
                 backgroundColor: `hsl(var(--marker-background))`,
                 borderColor: '#10b981',
@@ -101,7 +101,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                     href={event.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-bold text-lg leading-tight hover:opacity-80 transition-opacity"
+                    className="font-bold text-base sm:text-lg leading-tight hover:opacity-80 transition-opacity"
                     style={{
                       color: '#10b981',
                       cursor: 'pointer',
@@ -114,7 +114,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                   </a>
                 ) : (
                   <h3 
-                    className="font-bold text-lg leading-tight"
+                    className="font-bold text-base sm:text-lg leading-tight"
                     style={{
                       color: '#10b981',
                       wordBreak: 'break-word'
@@ -127,7 +127,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
               </div>
               <button
                 onClick={onClose}
-                className="text-xl font-bold transition-colors duration-200 hover:scale-110 transform ml-2 flex-shrink-0"
+                className="text-lg sm:text-xl font-bold transition-colors duration-200 hover:scale-110 transform ml-2 flex-shrink-0"
                 style={{
                   color: '#10b981',
                   cursor: 'pointer',
@@ -142,12 +142,12 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
             </div>
 
             {/* Two column layout: Left (date & address), Right (info & organizer) */}
-            <div className="px-4">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="px-3 sm:px-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                 
                 {/* LEFT COLUMN - Date and Day with Address */}
                 <div 
-                  className="p-4 rounded-lg border-2 min-h-[180px] flex flex-col justify-center"
+                  className="p-3 sm:p-4 rounded-lg border-2 min-h-[160px] sm:min-h-[180px] flex flex-col justify-center"
                   style={{
                     backgroundColor: `hsl(var(--marker-surface))`,
                     borderColor: `hsl(var(--marker-border))`
@@ -155,9 +155,9 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                 >
                   {/* Date and Day */}
                   {event.startDate && (
-                    <div className="mb-4">
+                    <div className="mb-3 sm:mb-4">
                       <p 
-                        className="text-sm font-semibold mb-1"
+                        className="text-xs sm:text-sm font-semibold mb-1"
                         style={{
                           color: `hsl(var(--marker-text-primary))`,
                           wordBreak: 'break-word'
@@ -173,7 +173,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                     <div>
                       {event.venue && (
                         <p 
-                          className="font-semibold text-sm mb-1"
+                          className="font-semibold text-xs sm:text-sm mb-1"
                           style={{
                             color: `hsl(var(--marker-text-primary))`,
                             wordBreak: 'break-word'
@@ -184,7 +184,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                       )}
                       {event.address && (
                         <p 
-                          className="text-xs leading-relaxed"
+                          className="text-[10px] sm:text-xs leading-relaxed"
                           style={{
                             color: `hsl(var(--marker-text-secondary))`,
                             wordBreak: 'break-word'
@@ -198,17 +198,17 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                 </div>
 
                 {/* RIGHT COLUMN - Info and Organizer */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {/* Event Info and Link Box - Top */}
                   <div 
-                    className="p-4 rounded-lg border-2"
+                    className="p-3 sm:p-4 rounded-lg border-2"
                     style={{
                       backgroundColor: `hsl(var(--marker-surface))`,
                       borderColor: `hsl(var(--marker-border))`
                     }}
                   >
                     <h4 
-                      className="font-bold text-sm mb-2"
+                      className="font-bold text-xs sm:text-sm mb-2"
                       style={{
                         color: `hsl(var(--marker-text-primary))`
                       }}
@@ -217,7 +217,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                     </h4>
                     {event.description ? (
                       <p 
-                        className="text-xs leading-relaxed line-clamp-3"
+                        className="text-[10px] sm:text-xs leading-relaxed line-clamp-3"
                         style={{
                           color: `hsl(var(--marker-text-secondary))`,
                           wordBreak: 'break-word'
@@ -227,7 +227,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                       </p>
                     ) : (
                       <p 
-                        className="text-xs italic"
+                        className="text-[10px] sm:text-xs italic"
                         style={{
                           color: `hsl(var(--marker-text-muted))`
                         }}
@@ -240,7 +240,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                         href={event.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-semibold mt-2 inline-block hover:opacity-70 transition-opacity"
+                        className="text-[10px] sm:text-xs font-semibold mt-2 inline-block hover:opacity-70 transition-opacity"
                         style={{
                           color: `hsl(var(--marker-accent))`,
                           cursor: 'pointer'
@@ -253,14 +253,14 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
 
                   {/* Organizer Info and Other Information Box - Bottom */}
                   <div 
-                    className="p-4 rounded-lg border-2"
+                    className="p-3 sm:p-4 rounded-lg border-2"
                     style={{
                       backgroundColor: `hsl(var(--marker-surface))`,
                       borderColor: `hsl(var(--marker-border))`
                     }}
                   >
                     <h4 
-                      className="font-bold text-sm mb-2"
+                      className="font-bold text-xs sm:text-sm mb-2"
                       style={{
                         color: `hsl(var(--marker-text-primary))`
                       }}
@@ -269,7 +269,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                     </h4>
                     {event.organizer ? (
                       <p 
-                        className="text-xs leading-relaxed"
+                        className="text-[10px] sm:text-xs leading-relaxed"
                         style={{
                           color: `hsl(var(--marker-text-secondary))`,
                           wordBreak: 'break-word'
@@ -279,7 +279,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                       </p>
                     ) : (
                       <p 
-                        className="text-xs italic"
+                        className="text-[10px] sm:text-xs italic"
                         style={{
                           color: `hsl(var(--marker-text-muted))`
                         }}
@@ -295,7 +295,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
 
             {/* Event Image - Full Width if available */}
             {event.image && (
-              <div className="mt-4 px-4">
+              <div className="mt-3 sm:mt-4 px-3 sm:px-4">
                 <div 
                   className="rounded-lg overflow-hidden border-2 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-[1.02] relative"
                   style={{
@@ -305,7 +305,7 @@ const MarkerInfoWindow = memo(({ event, onClose, isLoading, isCached, isPosition
                   onClick={handleImageClick}
                   title="Click to view larger image"
                 >
-                  <div className="relative h-40 sm:h-48 overflow-hidden">
+                  <div className="relative h-32 sm:h-40 lg:h-48 overflow-hidden">
                     <img
                       src={event.image}
                       alt={event.name}
