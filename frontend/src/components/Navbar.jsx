@@ -156,7 +156,7 @@ const Navbar = ({ isMapMoving = false }) => {
                 showFilterPanel ? 'opacity-100' : 'opacity-90 hover:opacity-100'
               }`}
             >
-              <div className="flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-2 md:p-3 text-white shadow-inner flex-shrink-0">
+              <div className="flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-2 md:p-3 text-white shadow-inner flex-shrink-0 hover:cursor-pointer">
                 <Filter className="w-4 h-4 md:w-5 md:h-5" />
               </div>
               <div className="leading-tight flex-1 md:flex-none">
