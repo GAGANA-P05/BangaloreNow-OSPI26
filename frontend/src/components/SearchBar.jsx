@@ -152,7 +152,7 @@ export function SearchBar({ onSearch, onEventSelect, userLocation }) {
                 <button
                   key={event.id}
                   onClick={() => handleEventClick(event)}
-                  className="w-full px-3 py-2 sm:py-3 hover:bg-gray-100 transition-colors text-left border-b last:border-b-0"
+                  className="w-full px-3 py-2 sm:py-3 hover:bg-gray-100 transition-colors text-left border-b last:border-b-0 cursor-pointer"
                 >
                   <div className="space-y-1">
                     <div className="font-medium text-xs sm:text-sm line-clamp-1 text-gray-900">
